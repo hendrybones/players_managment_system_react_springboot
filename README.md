@@ -56,7 +56,58 @@
 
  ## General essential syntax in Reactjs fundamental
  1. props -are used to pass data from one component to another (using this.props.history.push(`/view-player/${id}`);)
- 2. we use state to get the id of an element in an array using this code (id: this.props.match.params.id)
+ 2. we use state to get the id of an element in an array using this code (id: this.props.match.params.id
+ 3. we commonly make api call in commponentDidMount() method for example to save or update data use
+ 4. componentDidMount(){
+
+        // step 4
+        if(this.state.id === '_add'){
+            return
+        }else{
+            PlayerService.getPlayerById(this.state.id).then( (res) =>{
+                let player = res.data;
+                this.setState({firstName: player.firstName,
+                    lastName: player.lastName,
+                    emailId : player.emailId
+                });
+            });
+        }        
+    }
+  ##   we use the following code to compare between the string using a method the you make a call
+    if(this.state.id === '_add'){
+            return <h3 className="text-center">Add Player</h3>
+        }else{
+            return <h3 className="text-center">Update Player</h3>
+        }
       
+  ##  we  use th follewing code to call the method from the service to save or update data
+   saveOrUpdatePlayer = (e) => {
+        e.preventDefault();
+        let player = {firstName: this.state.firstName, lastName: this.state.lastName, emailId: this.state.emailId};
+        console.log('player => ' + JSON.stringify(player));
+
+        // step 5
+        if(this.state.id === '_add'){
+            PlayerService.createPlayer(player).then(res =>{
+                this.props.history.push('/players');
+            });
+        }else{
+            console.log('id => ' + JSON.stringify(this.state.id));
+        PlayerService.updatePlayer(player, this.state.id).then( res => {
+            this.props.history.push('/players');
+        });
+        }
+    }
+    
+    
+  ## how to update record pulling the exist data and making some changes
+  
+  ## create api endpoint using spring boot
+  1. create your model class
+  2. creat a respositoty for your model class and then extend jpa repository which contain methods to perform crude operatio to the database
+  3. create your service 
+  4. then your controller which contain endpoints for httprequest
+  5. connect to the database
+  6. 
       
 
